@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Supplier;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
 
-class ImportSuppliersSeeder extends Seeder
+class ImportCategoriesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,7 @@ class ImportSuppliersSeeder extends Seeder
      */
     public function run()
     {
+
         $csvFile = public_path('suppliers.csv');
         $csvData = file_get_contents($csvFile);
         $rows = explode("\n", $csvData);
@@ -24,9 +25,9 @@ class ImportSuppliersSeeder extends Seeder
             if (count($data) == count($header)) {
                 $data = array_combine($header, $data);
 
-                if($data['supplier_name']!=""){
-                    Supplier::firstOrCreate(
-                        ['supplier_name' => $data['supplier_name']],
+                if($data['category']!=""){
+                    Category::firstOrCreate(
+                        ['category_name' => $data['category']]
                     );
                 }
 

@@ -15,8 +15,8 @@ class CreatePartsTable extends Migration
     {
         Schema::create('parts', function (Blueprint $table) {
             $table->id();
-            $table->string('part_number')->unique();
-            $table->string('part_desc')->unique();
+            $table->string('part_number');
+            $table->string('part_desc');
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
             $table->timestamps();
         });

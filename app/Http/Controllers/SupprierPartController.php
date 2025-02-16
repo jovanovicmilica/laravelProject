@@ -2,21 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Supplier;
+use App\Models\Supplier_Part;
+use App\Models\SupplierPart;
 use Illuminate\Http\Request;
 
-class SupplierController extends Controller
+class SupprierPartController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $suppliers=Supplier::all();
+        //
+        $per_page = $request->get('per_page', 15);
 
-        return response()->json($suppliers);
+        // Get supplier-parts with pagination
+//        $supplierParts = Supplier_Part::paginate($per_page);
+
+
+        $supplierParts = SupplierPart::with(['part.category', 'condition:id,condition_name','part.category'])
+        ->paginate($per_page)
+            ->through(function ($supplierPart) {
+                return [
+                    'supplier_name' => $supplierPart->supplier->supplier_name,
+                    'days_valid' => $supplierPart->days_valid,
+                    'priority' => $supplierPart->priority,
+                    'part_number' => $supplierPart->part ? $supplierPart->part->part_number : 'N/A',
+                    'part_desc' => $supplierPart->part ? $supplierPart->part->part_desc : 'N/A',
+                    'quantity' => $supplierPart->quantity,
+                    'price' => $supplierPart->price,
+                    'condition_name' => $supplierPart->condition ? $supplierPart->condition->condition_name : 'N/A',
+                    'category' => optional($supplierPart->part->category)->category_name ?? 'N/A',
+                ];
+            });
+
+        return response()->json($supplierParts);
     }
 
     /**
@@ -71,26 +93,7 @@ class SupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = \Validator::make($request->all(), [
-            'supplier_name' => 'required|string|unique:suppliers,supplier_name,' . $id,
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-
-        $supplier = Supplier::find($id);
-
-        if(!$supplier){
-            return response()->json(['message' => 'Supplier not found'], 404);
-        }
-
-
-        $supplier->supplier_name = $request->supplier_name;
-        $supplier->save();
-
-        return response()->json($supplier, 200);
-
+        //
     }
 
     /**
@@ -101,14 +104,6 @@ class SupplierController extends Controller
      */
     public function destroy($id)
     {
-        $supplier = Supplier::find($id);
-
-        if(!$supplier){
-            return response()->json(['message' => "Supplier $id not found."], 404);
-        }
-
-        $supplier->delete();
-
-        return response()->json(['message' => "Supplier $id deleted successfully."], 200);
+        //
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Condition;
 use App\Models\Part;
 use App\Models\Supplier;
 use App\Models\Supplier_Part;
+use App\Models\SupplierPart;
 use Illuminate\Database\Seeder;
 
 class ImportSupplierPartsSeeder extends Seeder
@@ -64,7 +65,7 @@ class ImportSupplierPartsSeeder extends Seeder
                 $quantity = $data['quantity']!="" ? (int)$data['quantity'] : null;
                 $price = $data['price']!="" ? (int)$data['price'] : null;
 
-                Supplier_Part::create([
+                SupplierPart::create([
                     'supplier_id' => $supplier_id,
                     'part_id' => $part_id,
                     'days_valid' => $daysValid,

@@ -13,4 +13,10 @@ class Part extends Model
     {
         return $this->belongsToMany(Supplier::class, 'supplier_parts');
     }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+
 }

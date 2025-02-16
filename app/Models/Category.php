@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
+    public function parts()
+    {
+        return $this->hasMany(Part::class, 'category_id');
+    }
+
 }

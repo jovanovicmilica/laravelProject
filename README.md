@@ -65,5 +65,5 @@ Clone the repository:
         "per_page": "10", //optional 
     }
 
-    Expost parts for specific supplier
+    ##Export parts for specific supplier
     GET /supplier/{supplier_id}/export

@@ -21,7 +21,7 @@ Clone the repository:
     php artisan serve
 
 ## API Endpoints
-    ### Parts
+### Parts
     List all parts with pagination, search option by description and filter by supplier
     GET /parts
     Request body:
@@ -43,7 +43,7 @@ Clone the repository:
     Delete part by id
     DELETE /parts/{id}
 
-    ### Suppliers
+### Suppliers
     List all suppliers
     GET /suppliers
 
@@ -57,7 +57,7 @@ Clone the repository:
     Delete supplier by id
     DELETE /suppliers/{id}
 
-    ### SupplierParts
+### SupplierParts
     List all supplier parst (as it is in .csv file)
     GET /supplier_parts
     Request body:
@@ -65,5 +65,5 @@ Clone the repository:
         "per_page": "10", //optional 
     }
 
-    ##Export parts for specific supplier
+##Export parts for specific supplier
     GET /supplier/{supplier_id}/export

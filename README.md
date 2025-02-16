@@ -12,7 +12,7 @@ Clone the repository:
 ## Database Setup
     This project uses **Laravel migrations** to create the database schema and **seeders** to populate data from a CSV file.
 
- ## Running Migrations
+ ## Running Migrations and Seeders
     Migrations are used to define and create database tables. To apply them, run:
     php artisan migrate
     Seeders are used for inserting initial data into the database. The .csv file is located at public/suppliers.csv

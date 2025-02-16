@@ -16,9 +16,9 @@ Clone the repository:
     Migrations are used to define and create database tables. To apply them, run:
     php artisan migrate
     Seeders are used for inserting initial data into the database. The .csv file is located at public/suppliers.csv
-   php artisan db:seed
+    php artisan db:seed
    
-   php artisan serve
+    php artisan serve
 
 ## API Endpoints
     ### Parts

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Supplier;
 use App\Models\Supplier_Part;
 use App\Models\SupplierPart;
+use Carbon\Carbon;
+use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SupprierPartController extends Controller
 {
@@ -105,5 +109,46 @@ class SupprierPartController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function exportSupplierPartsToCSV($id)
+    {
+        $supplier = Supplier::find($id);
+
+
+        if (!$supplier) {
+            return response()->json(['message' => 'Supplier not found'], 404);
+        }
+
+        $supplierParts = SupplierPart::with(['part.category', 'condition'])
+            ->where('supplier_id', $id)
+            ->get();
+
+        if ($supplierParts->isEmpty()) {
+            return response()->json(['message' => 'No parts found for this supplier'], 404);
+        }
+
+        $supplierName = preg_replace('/[^a-zA-Z0-9]/', '_', strtolower($supplier->supplier_name)); // Convert non-alphanumeric to "_"
+        $timestamp = Carbon::now()->format('Y_m_d-H_i'); // Format: 2025_02_16-12_30
+        $filename = "{$supplierName}_{$timestamp}.csv";
+
+        $csvData = "Part Number,Part Description,Category,Quantity,Price,Condition\n";
+
+        foreach ($supplierParts as $part) {
+            $csvData .= "{$part->part->part_number},";
+            $csvData .= "\"{$part->part->part_desc}\",";
+            $csvData .= $part->part->category ? $part->part->category->category_name : "N/A";
+            $csvData .= ",{$part->quantity},";
+            $csvData .= "{$part->price},";
+            $csvData .= $part->condition ? $part->condition->condition_name : "N/A";
+            $csvData .= "\n";
+        }
+
+        Storage::put("exports/{$filename}", $csvData);
+
+        return Response::make($csvData, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename={$filename}",
+        ]);
     }
 }
